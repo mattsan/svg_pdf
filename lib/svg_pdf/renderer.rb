@@ -8,7 +8,12 @@ module SvgPdf
     POINT_PER_INCH = 72
 
     def self.render_svg(source, **params)
-      paper_size = SvgPdf::PaperSize(params[:paper] || :A4)
+      paper_size =
+        if params[:paper].is_a?(Hash) && params[:paper].size == 1
+          SvgPdf::PaperSize(*params[:paper].to_a.first)
+        else
+          SvgPdf::PaperSize(params[:paper] || :A4)
+        end
 
       s = source.split("\n").map {|line| "  #{line}" }.join("\n")
 

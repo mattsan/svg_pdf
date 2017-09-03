@@ -8,8 +8,7 @@ module SvgPdf
     POINT_PER_INCH = 72
 
     def self.render_svg(source, **params)
-      params[:width] ||= 297
-      params[:height] ||= 210
+      paper_size = params[:paper] || SvgPdf::PaperSize::A4
 
       s = source.split("\n").map {|line| "  #{line}" }.join("\n")
 
@@ -18,7 +17,7 @@ module SvgPdf
         #{s}
       EOS
 
-      Haml::Engine.new(ss).render(OpenStruct.new(params))
+      Haml::Engine.new(ss).render OpenStruct.new(paper_size.to_h.merge(params))
     end
 
     def self.save_as_pdf(source, filename, **params)

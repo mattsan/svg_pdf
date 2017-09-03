@@ -6,6 +6,26 @@ module SvgPdf
       @width = width
       @height = height
     end
+
+    def to_h
+      {width: @width, height: @height}
+    end
+
+    def to_a
+      [@width, @height]
+    end
+
+    def to_s
+      to_a.join(',')
+    end
+
+    def portrait
+      self
+    end
+
+    def landscape
+      PaperSize.new(@height, @width)
+    end
   end
 
   class PaperSize

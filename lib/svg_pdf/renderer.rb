@@ -1,5 +1,4 @@
 require 'haml'
-require 'rsvg2'
 require 'ostruct'
 
 module SvgPdf
@@ -22,21 +21,7 @@ module SvgPdf
         #{s}
       EOS
 
-      Haml::Engine.new(ss).render OpenStruct.new(paper_size.to_h.merge(params))
-    end
-
-    def self.save_as_pdf(source, filename, **params)
-      svg = RSVG::Handle.new_from_data(render_svg(source, params))
-      dim = svg.dimensions
-      surface = Cairo::PDFSurface.new(File.open(filename, 'w'), dim.width, dim.height)
-
-      cairo = Cairo::Context.new(surface)
-      cairo.render_rsvg_handle(svg)
-
-      {
-        height: dim.height,
-        width: dim.width
-      }
+      SvgPdf::SVG.new(Haml::Engine.new(ss).render OpenStruct.new(paper_size.to_h.merge(params)))
     end
   end
 end

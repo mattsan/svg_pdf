@@ -12,7 +12,7 @@ module SvgPdf
       @template = template
     end
 
-    def render_svg(**params)
+    def render(**params)
       paper_size =
         if params[:paper].is_a?(Hash) && params[:paper].size == 1
           SvgPdf::PaperSize(*params[:paper].to_a.first)
